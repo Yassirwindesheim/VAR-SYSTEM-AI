@@ -8,7 +8,7 @@ MODEL_NAAM = 'yolov8_attack_direction'
 
 # RELATIEF PAD naar de HOOFDMAP van de dataset.
 
-# Dit pad is RELATIEF t.o.v. de 'offside-ai-full' map.
+# Dit is pad 
 DATASET_ROOT_PATH = Path('../data/My First Project.v1-datasetfootball.folder') 
 
 YOLO_DATA_PATH = str(DATASET_ROOT_PATH.resolve())
