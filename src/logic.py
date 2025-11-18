@@ -3,8 +3,8 @@ from sklearn.cluster import KMeans
 import cv2
 import numpy as np
 import os
-from ultralytics import YOLO  # NIEUW: Voor classificatie
-from pathlib import Path    # NIEUW: Voor robuuste paden
+from ultralytics import YOLO 
+from pathlib import Path    
 
 
 # --- Setup Constants for Drawing ---
@@ -23,13 +23,12 @@ if not os.path.exists(OUTPUT_FOLDER):
 # 🤖 CLASSIFICATION MODEL SETUP
 # -------------------------------------------------------------
 
-# De absolute root map (waar logic.py in src/ zit)
+
 ROOT = Path(__file__).resolve().parent.parent 
 
-# *** CRUCIAAL: VERIFIEER DIT PAD ***
+
 CLASSIFICATION_MODEL_PATH = r'C:\Users\yassi\runs\classify\yolov8_attack_direction2\weights\best.pt'
 
-# Definieer de klassen in de volgorde die je in Roboflow hebt gebruikt
 CLASSIFICATION_KLASSEN = ['attacking_left', 'attacking_right'] 
 
 # Laad het classificatie model slechts één keer
@@ -54,7 +53,7 @@ def voorspel_aanvalsrichting(frame: np.ndarray) -> str:
     return CLASSIFICATION_KLASSEN[top_index]
 
 # -------------------------------------------------------------
-# --- Main Logic ---
+# --- Main Logica ---
 data = pd.read_csv("../data/detections.csv")
 image_names = data["image_name"].unique()
 
@@ -78,8 +77,7 @@ for image in image_names:
     if len(players) < 2:
         print(f"{image}: not enough players for team detection.")
         continue
-    
-    # Get image dimensions
+
     h, w = frame_img.shape[:2]
     
     # Initialize feature lists
@@ -87,7 +85,7 @@ for image in image_names:
     player_indices = []
 
 
-    # --- Extract Features from Each Player (LAB COLOR SPACE) ---
+   
     for idx, row in players.iterrows():
         x1, y1, x2, y2 = map(int, [row["x1"], row["y1"], row["x2"], row["y2"]])
         
@@ -105,7 +103,7 @@ for image in image_names:
         if crop.size == 0:
             continue
         
-        # Convert to LAB color space (better for color differences)
+      
         lab = cv2.cvtColor(crop, cv2.COLOR_BGR2LAB)
         
         # Calculate mean LAB values
@@ -122,7 +120,7 @@ for image in image_names:
         continue
 
 
-    # --- K-Means Clustering for Team Assignment ---
+    # --- K-Means Clustering voor Team  ---
     kmeans = KMeans(n_clusters=2, n_init=10, random_state=0)
     labels = kmeans.fit_predict(features)
 
@@ -191,7 +189,7 @@ for image in image_names:
     
     
     # -----------------------------------------------------------------
-    # ✅ BAL CHECK EN POSITIE BEPALING (NU OPTIONEEL)
+    #  BAL CHECK EN POSITIE BEPALING (NU OPTIONEEL)
     # -----------------------------------------------------------------
     ball_detected = len(ball) > 0
     
@@ -261,7 +259,7 @@ for image in image_names:
 
 
     # -----------------------------------------------------------------
-    # 📊 TEXTUAL OFFSIDE CHECK LOGIC
+    # 📊 TEKST OFFSIDE CHECK LOGICA
     # -----------------------------------------------------------------
     
     if not ball_detected:
