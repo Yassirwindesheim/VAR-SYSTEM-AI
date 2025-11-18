@@ -3,7 +3,6 @@ import csv
 import glob
 from pathlib import Path
 
-# --- Always use absolute paths ---
 ROOT = Path(__file__).resolve().parent.parent  # .../offside-ai-full
 DATA_DIR = ROOT / "data"
 OUT_CSV = DATA_DIR / "detections.csv"
@@ -24,7 +23,7 @@ results = model(image_paths, conf=0.03, imgsz=1280, classes=[0, 32])
 
 rows_written = 0
 
-# --- Write detections ---
+# ---  detections ---
 with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
 
@@ -36,7 +35,7 @@ with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
         "conf"
     ])
 
-    # Loop through images and their detections
+    # Loop  images and  detections
     for path, result in zip(image_paths, results):
         image_name = Path(path).name
 
@@ -47,7 +46,7 @@ with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
             cls = int(box.cls[0])
             conf = float(box.conf[0])
 
-            # ✅ Values now match header order
+            
             writer.writerow([
                 image_name, cls,
                 round(x1, 2), round(y1, 2),
